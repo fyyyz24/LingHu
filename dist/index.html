@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>灵葫——基于Hulu-Med的临床思维训练教学模型</title>
+  <meta name="description" content="灵葫——基于Hulu-Med的临床思维训练教学模型，提供多模态病例、分层引导、循证反馈与教学评价。" />
+  <link rel="icon" type="image/png" href="./assets/linghu-logo.png" />
+  <link rel="stylesheet" href="./styles.css?v=20260927c" />
+  <link rel="stylesheet" href="./enhancements.css?v=20260927c" />
+  <link rel="stylesheet" href="./workflow.css?v=20260927c" />
+  <link rel="stylesheet" href="./clinical-report.css?v=20260927c" />
+  <link rel="stylesheet" href="./clinical-experience.css?v=20260927c" />
+  <link rel="stylesheet" href="./functional.css?v=20260927c" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-logo" src="./assets/linghu-logo.png" alt="灵葫项目 Logo" />
+        <div><strong>灵葫</strong><small>基于Hulu-Med的<br />临床思维训练教学模型</small></div>
+      </div>
+      <nav aria-label="主要功能">
+        <button class="nav-item" data-view="overview"><span>01</span>项目总览</button>
+        <button class="nav-item" data-view="cases"><span>02</span>病例库</button>
+        <button class="nav-item" data-view="data"><span>03</span>数据工坊</button>
+        <button class="nav-item" data-view="training"><span>04</span>模型适配</button>
+        <button class="nav-item active" data-view="student"><span>05</span>学生训练</button>
+        <button class="nav-item" data-view="evidence"><span>06</span>证据面板</button>
+        <button class="nav-item" data-view="report"><span>07</span>教师报告</button>
+      </nav>
+      <div class="sidebar-actions"><button class="tour-trigger" id="tourTrigger">▶ 录屏导览</button><div class="system-note"><i></i><span>教学系统运行正常</span></div></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div><span class="eyebrow" id="pageEyebrow">学生训练 · CASE 01</span><h1 id="pageTitle">呼吸困难的分阶段临床推理</h1></div>
+        <div class="header-actions"><span class="offline-status" id="saveState">本机训练记录</span><button class="secondary-button" id="recordMode">录屏模式</button><button class="ghost-button" id="resetDemo">重置训练</button></div>
+      </header>
+
+      <section class="view" id="view-overview" aria-labelledby="pageTitle">
+        <div class="hero-strip">
+          <div class="hero-copy"><span class="section-kicker">从“会回答”到“会带教”</span><h2>灵葫——面向分层医学教育的临床思维训练系统</h2><p>依托 Hulu-Med 统一多模态理解能力，构建“病例数据—分层引导—循证反馈—教师评估”闭环，让临床推理过程可练习、可追踪、可评价。</p><div class="hero-actions"><button class="primary-button" data-jump="student">进入训练场景</button><button class="secondary-button" data-jump="data">查看数据构建</button></div></div>
+          <div class="hero-orbit" aria-label="动态临床思维训练闭环">
+            <div class="orbit-halo"></div><div class="orbit-ring ring-a"></div><div class="orbit-ring ring-b"></div><div class="orbit-scan"></div>
+            <div class="orbit-core"><span>LINGHU AI</span>临床思维<strong>训练闭环</strong></div>
+            <span class="orbit-node n1"><i>◇</i>多模态病例</span><span class="orbit-node n2"><i>⌁</i>分层提问</span><span class="orbit-node n3"><i>◎</i>循证反馈</span><span class="orbit-node n4"><i>△</i>教师评估</span>
+            <div class="orbit-particles"><b></b><b></b><b></b><b></b><b></b></div>
+          </div>
+        </div>
+        <div class="stat-grid"><article><span>基础模型论文数据规模</span><strong>16.7M</strong><small>文本、2D、3D 与视频样本</small></article><article><span>论文覆盖评测</span><strong>30</strong><small>Hulu-Med 官方基准</small></article><article><span>教学推理阶段</span><strong>5</strong><small>问诊至治疗决策</small></article><article><span>学习者层级</span><strong>3</strong><small>见习、实习、住培</small></article></div>
+        <div class="two-column overview-grid">
+          <article class="panel architecture-panel"><div class="panel-heading"><div><span>技术路线</span><h3>能力继承与教学增强</h3></div><span class="source-tag">Hulu-Med + 教学适配</span></div><div class="architecture"><div class="arch-layer foundation"><span>基础层</span><strong>Hulu-Med 多模态医学基础模型</strong><small>医学文本 · 2D · 3D · 视频统一理解</small></div><div class="flow-arrow">↓</div><div class="arch-layer teaching"><span>教学层</span><strong>临床思维教学适配</strong><small>五阶段轨迹 · 三层级提示 · 苏格拉底式引导</small></div><div class="flow-arrow">↓</div><div class="arch-layer product"><span>应用层</span><strong>学生训练与教师评估</strong><small>循证反馈 · 风险提醒 · 学情报告</small></div></div></article>
+          <article class="panel boundary-panel"><div class="panel-heading"><div><span>核心能力</span><h3>教学闭环</h3></div></div><ul class="boundary-list"><li><i class="official"></i><div><strong>多模态病例理解</strong><p>统一处理病史文本、胸片、CT、病理与视频信息。</p></div></li><li><i class="proposal"></i><div><strong>分层启发式带教</strong><p>依据见习、实习、住培层级动态调整引导颗粒度。</p></div></li><li><i class="simulated"></i><div><strong>循证反馈与学情分析</strong><p>记录推理路径、危险遗漏、纠错轨迹与证据使用。</p></div></li></ul></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-cases" aria-labelledby="pageTitle">
+        <div class="toolbar panel"><label class="search-box">⌕<input id="caseSearch" type="search" placeholder="搜索病例、系统或能力标签" /></label><div class="filter-group"><button class="filter active" data-filter="all">全部</button><button class="filter" data-filter="呼吸">呼吸</button><button class="filter" data-filter="心血管">心血管</button><button class="filter" data-filter="急诊">急诊</button><button class="filter" data-filter="罕见病">罕见病</button></div></div>
+        <div class="case-grid" id="caseGrid"></div><div id="caseEmpty" class="empty-state panel" hidden>未找到匹配病例，请尝试其他关键词或分类。</div>
+      </section>
+
+      <section class="view" id="view-data" aria-labelledby="pageTitle">
+        <div class="data-intro panel"><div><span class="section-kicker">DATA FACTORY</span><h2>病例教学数据构建流水线</h2><p>将多模态病例转写为可训练、可审计的临床推理轨迹。点击节点查看输入、处理规则与输出。</p></div><div class="data-summary"><span><b id="dataCaseCount">6</b>交互病例</span><span><b>5</b>阶段轨迹</span><span><b>3</b>层级提示</span></div></div>
+        <article class="panel case-import"><span class="section-kicker">LOCAL CASE IMPORT</span><h2>导入病例 · 从文件到可训练病例</h2><p class="import-description">上传 JSON 或粘贴内容，先校验再确认。支持五阶段任务、分层提示、文献绑定与内嵌 PNG / JPEG / WebP 图片。仅保存在当前浏览器，不上传、不自动脱敏。</p><form id="caseImportForm"><div class="import-actions"><label>选择病例 JSON <input id="caseImportFile" type="file" accept=".json,application/json"></label><button type="button" class="secondary-button" id="loadImportExample">填入可导入示例</button></div><textarea id="caseImportText" aria-label="病例 JSON 内容" placeholder="粘贴病例 JSON，或先填入教学示例。"></textarea><label class="import-consent"><input id="confirmDeidentified" type="checkbox">我已人工脱敏并确认拥有资料使用权限。结构校验不等于医学审核。</label><div class="import-actions"><button class="secondary-button" type="submit">校验并预览</button><button class="primary-button" type="button" id="confirmCaseImport" disabled>确认导入病例库</button></div></form><div id="importPreview" class="import-preview" role="status">尚未校验。病例只写入本机浏览器，不上传患者资料。</div></article>
+        <div class="data-template"><span>真实病例由临床教师校核后接入</span><button class="secondary-button" id="downloadTemplate">下载医生病例编排模板</button></div><div class="pipeline" id="pipeline"><button class="pipeline-step active" data-step="0"><b>01</b><span>导入与脱敏<small>文本 + 医学影像</small></span></button><i>→</i><button class="pipeline-step" data-step="1"><b>02</b><span>五阶段拆解<small>临床推理轨迹</small></span></button><i>→</i><button class="pipeline-step" data-step="2"><b>03</b><span>专家标注<small>支持/反对证据</small></span></button><i>→</i><button class="pipeline-step" data-step="3"><b>04</b><span>分层提示<small>见习/实习/住培</small></span></button><i>→</i><button class="pipeline-step" data-step="4"><b>05</b><span>证据绑定<small>来源与版本</small></span></button><i>→</i><button class="pipeline-step" data-step="5"><b>06</b><span>质量检查<small>安全与非剧透</small></span></button></div>
+        <div class="two-column data-workspace"><article class="panel step-detail" id="stepDetail"></article><article class="panel quality-panel"><div class="panel-heading"><div><span>QUALITY GATE</span><h3>数据质量检查</h3></div><span class="review-badge">质检规则</span></div><div class="quality-score"><div><strong>4</strong><span>项</span></div><p>关键检查规则<br><small>覆盖隐私、教学与安全</small></p></div><ul class="checklist"><li class="pass"><span>✓</span><div><b>隐私字段清除</b><small>姓名、ID、机构标识</small></div></li><li class="pass"><span>✓</span><div><b>最终诊断延迟揭示</b><small>规定阶段前不直接给答案</small></div></li><li class="pass"><span>✓</span><div><b>危险遗漏标注</b><small>危急值与升级救治阈值</small></div></li><li class="warn"><span>!</span><div><b>证据版本复核</b><small>教材与指南需定期更新</small></div></li></ul></article></div>
+      </section>
+
+      <section class="view" id="view-training" aria-labelledby="pageTitle">
+        <div class="training-banner"><div><span class="source-tag">申报书技术路线</span><h2>Hulu-Med 教学行为适配</h2><p>围绕临床推理轨迹，完成数据构建、监督微调、教学偏好对齐与分级评价，使模型从“直接回答”转向“启发式带教”。</p></div><button class="secondary-button" data-jump="report">查看教学报告</button></div>
+        <div class="adaptation-flow" id="adaptationFlow"><button class="adapt-step active" data-adapt="0"><span>01</span><b>推理轨迹数据</b><small>五阶段标注</small></button><i>→</i><button class="adapt-step" data-adapt="1"><span>02</span><b>教学行为 SFT</b><small>学习启发式提问</small></button><i>→</i><button class="adapt-step" data-adapt="2"><span>03</span><b>偏好与安全对齐</b><small>只引导不剧透</small></button><i>→</i><button class="adapt-step" data-adapt="3"><span>04</span><b>分级教学评价</b><small>三级能力测评</small></button></div>
+        <div class="two-column adaptation-workspace"><article class="panel adaptation-detail" id="adaptationDetail"></article><article class="panel config-panel"><div class="panel-heading"><div><span>ADAPTATION MATRIX</span><h3>教学适配矩阵</h3></div></div><div class="config-table"><div><span>训练对象</span><b>Hulu-Med-Teaching</b></div><div><span>核心数据</span><b>临床推理轨迹</b></div><div><span>行为目标</span><b>苏格拉底式引导</b></div><div><span>层级标签</span><b>见习 / 实习 / 住培</b></div><div><span>安全约束</span><b>危急值优先 · 非剧透</b></div><div><span>评价方式</span><b>专家盲评 · 前后测</b></div></div></article></div>
+      </section>
+
+<section class="view active" id="view-student" aria-labelledby="pageTitle">
+        <div class="student-controls"><div class="control-set"><label>学习层级<select id="learnerLevel"><option value="clerk">见习</option><option value="intern">实习</option><option value="resident">住培</option></select></label><label>提示强度<select id="hintLevel"><option value="light">轻提示</option><option value="medium" selected>适中</option><option value="strong">强提示</option></select></label><label>训练病例<select id="caseSelector"></select></label></div><div class="stage-progress"><span>当前进度</span><div><i id="stageProgress"></i></div><strong id="stageProgressText">1 / 5</strong></div></div>
+        <div class="session-toolbar"><span>按阶段解锁资料 · 回答后查看本轮依据</span><div><button class="secondary-button" id="compareHints">对比分层提示</button><button class="secondary-button" id="viewTrace">查看本轮依据</button><button class="primary-button" id="nextStage" disabled>进入下一阶段</button></div></div><div class="student-workspace">
+          <aside class="case-rail panel"><div class="panel-heading compact"><div><span id="activeCaseCode">CASE 01</span><h3>推理阶段</h3></div><span class="score" id="stageCount">1 / 5</span></div><ol class="stages" id="stageList"></ol><div class="patient-card"><span>病例摘要</span><strong id="patientTitle">63 岁男性</strong><p id="patientSummary">进行性呼吸困难 5 天，伴右侧胸痛。</p><div class="vitals" id="patientVitals"></div></div></aside>
+          <section class="conversation panel"><div class="panel-heading compact"><div><span>SOCRATIC COACH</span><h3>苏格拉底式对话</h3></div><span class="status warning" id="conversationStatus">等待回答</span></div><div class="model-connection"><b>Hulu-Med 教学工作流</b><details><summary>当前连接：本地教学引擎</summary>尚未配置 Hulu-Med 推理服务。下方显示输入整理、引用匹配和要点核对的实际处理摘要，不是模型内部思维日志。</details></div><div class="messages" id="messages" aria-live="polite"></div><div class="processing-panel" id="processingPanel" hidden role="status" aria-live="polite"><button class="text-button" type="button" id="cancelProcessing">取消本轮</button><div class="processing-title"><i class="processing-ring" aria-hidden="true"></i><b>教学推理处理中</b></div><ol class="processing-phases"><li data-phase="0">01 输入整理</li><li data-phase="1">02 文献关联</li><li data-phase="2">03 要点核对</li><li data-phase="3">04 反馈组织</li></ol><p class="processing-description"></p><small class="processing-caption">本地处理步骤 · 不显示或伪造模型内部思维</small></div><form class="composer" id="reasoningForm"><textarea id="reasoningInput" maxlength="3000" aria-label="输入你的临床推理" placeholder="写下你的判断依据，而不只是诊断名称……"></textarea><div class="composer-actions"><span>系统会逐步追问，不提前揭示最终诊断</span><div><button class="text-button" type="button" id="sampleAnswer">填入示例</button><button class="primary-button" type="submit">提交推理</button></div></div></form></section>
+          <aside class="reasoning panel"><div class="panel-heading compact"><div><span>REASONING MAP</span><h3>推理画布</h3></div><button class="icon-button" id="openEvidence" aria-label="查看证据">↗</button></div><section><label>问题表征</label><p id="problemRepresentation"></p></section><section><label>鉴别诊断</label><div id="dxList"></div></section><section><label>证据覆盖</label><div class="evidence-bar"><span>已识别</span><i><b id="supportBar" style="width:28%"></b></i><strong id="supportCount">1</strong></div><div class="evidence-bar oppose"><span>待补充</span><i><b id="missingBar" style="width:72%"></b></i><strong id="missingCount">4</strong></div></section><div class="safety"><strong>安全提醒</strong><p id="safetyText"></p></div><button class="hint-button" id="requestHint">获取分层提示</button></aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-evidence" aria-labelledby="pageTitle"><div class="evidence-layout"><aside class="panel source-list"><div class="panel-heading"><div><span>SOURCE EXPLORER</span><h3>可追溯文献目录</h3></div></div><div class="evidence-filters"><label>检索来源<input id="evidenceQuery" type="search" placeholder="标题、章节、DOI"></label><label>关联病例<select id="evidenceCase"></select></label><label>来源类型<select id="evidenceType"><option value="all">全部来源</option><option value="foundation">模型论文 / 代码</option><option value="clinical">临床学习资料</option><option value="image">影像出处 / 许可</option></select></label></div><div id="sourceCatalog"></div></aside><article class="panel source-detail" id="sourceDetail"></article><aside class="panel trace-panel"><div class="panel-heading"><div><span>TRACEABILITY</span><h3>逐条反馈溯源</h3></div><span class="trace-id" id="traceBindingId">—</span></div><div class="trace-node student-node"><span>01 · 学生判断</span><p id="traceStudent">提交回答后显示原始判断。</p></div><div class="trace-line"><i></i></div><div class="trace-node"><span>02 · 教学反馈</span><p id="traceFeedback">系统根据学习者回答生成针对性追问。</p></div><div class="trace-line"><i></i></div><div class="trace-node pending-node"><span>03 · 本阶段关联文献</span><div id="traceGuide"><p>来源、版本、章节与审核信息待临床教师绑定。</p></div></div></aside></div></section>
+
+      <section class="view" id="view-report" aria-labelledby="pageTitle">
+        <div class="report-toolbar"><div><span class="review-badge">本次学习报告</span><strong id="reportCaseTitle"></strong></div><div><button class="secondary-button" id="exportReport">导出学习记录</button><button class="secondary-button" id="printReport">打印 / 导出 PDF</button></div></div>
+        <div class="report-grid"><article class="panel report-score"><span>教学要点覆盖率</span><div class="large-score"><strong id="reportScore">—</strong><small>%</small></div><p id="reportSummary"></p><div id="reportStats" class="report-stats"></div><small class="score-note">依据本次回答所提及的教学要点计算，不等同于临床能力评分或模型评测结果。</small></article>
+        <article class="panel competency"><div class="panel-heading"><div><span>STAGE RADAR</span><h3>五阶段能力雷达</h3></div><span class="live-badge">动态</span></div><div id="reportDimensions" class="competency-chart"></div></article>
+        <article class="panel teacher-evaluation"><div class="panel-heading"><div><span>TEACHER EVALUATION</span><h3>教师端评价看板</h3></div><small>演示规则动态计算</small></div><div id="teacherEvaluation"></div></article>
+        <article class="panel trajectory-replay"><div class="panel-heading"><div><span>REASONING REPLAY</span><h3>思维递进阶段</h3></div><button class="secondary-button play-trajectory" id="playTrajectory">▶ 动态演示</button></div><div id="trajectoryStepper"></div><div id="trajectoryDetail" class="trajectory-detail"></div></article>
+        <article class="panel report-timeline"><div class="panel-heading"><div><span>LEARNING TIMELINE</span><h3>推理轨迹复盘</h3></div></div><ol id="reportTimeline"></ol></article>
+        <article class="panel teacher-actions"><div class="panel-heading"><div><span>TEACHING ACTIONS</span><h3>关键遗漏与复盘建议</h3></div></div><div id="teacherAdvice"></div><button class="primary-button" data-jump="student">返回训练</button></article></div>
+      </section>
+
+      <footer>仅用于医学教育，不用于真实临床诊疗决策。© 2026 灵葫</footer>
+    </main>
+  </div>
+
+  <dialog id="evidenceDialog" class="modal"><form method="dialog"><button class="modal-close" aria-label="关闭">×</button></form><span class="section-kicker">CASE EVIDENCE</span><h2 id="evidenceDialogTitle">病例资料卡</h2><div class="modal-grid"><div class="case-evidence-visual" id="evidenceVisual" role="img" aria-label="病例资料"></div><div><span class="source-tag" id="evidenceSource"></span><h3 id="evidenceFocusTitle">观察重点</h3><ol id="evidenceChecklist"></ol><p class="modal-note" id="evidenceNote"></p></div></div></dialog>
+  <dialog id="traceDialog" class="modal trace-drawer" aria-labelledby="traceHeading"><form method="dialog"><button class="modal-close" aria-label="关闭依据面板">×</button></form><span class="section-kicker">TEACHING RATIONALE</span><h2 id="traceHeading"></h2><div id="traceBody"></div></dialog>
+  <dialog id="compareDialog" class="modal" aria-labelledby="compareTitle"><form method="dialog"><button class="modal-close" aria-label="关闭提示对比">×</button></form><span class="section-kicker">LAYERED GUIDANCE</span><h2 id="compareTitle">同一问题，三种带教颗粒度</h2><div id="hintComparison" class="hint-comparison"></div></dialog>
+  <dialog id="caseDetailDialog" class="modal case-detail-dialog" aria-labelledby="caseDetailTitle"><form method="dialog"><button class="modal-close" aria-label="关闭病例详情">×</button></form><div class="case-detail-head"><div><span class="section-kicker">MULTIMODAL CASE CARD</span><h2 id="caseDetailTitle">病例详情</h2><p id="caseDetailPatient"></p></div><div><span>当前病例阶段</span><strong id="caseDetailStage">问诊 · 1 / 5</strong></div></div><div class="case-stage-strip" id="caseDetailStages"></div><div class="case-detail-layout"><section class="case-detail-text" id="caseDetailText"></section><section class="case-detail-media"><div class="media-tabs" id="caseMediaTabs"></div><div class="media-view" id="caseMediaView"></div><p id="caseMediaCaption"></p></section></div><div class="case-detail-actions"><small>真实病例资料、影像授权与医学内容由临床教师审核后接入。</small><button class="primary-button" id="caseDetailStart">进入本病例训练</button></div></dialog>
+  <aside id="recordingDock" class="recording-dock" aria-label="录屏导览" hidden><div><strong id="guideLabel"></strong><p id="guideTip"></p></div><div class="guide-buttons"><button class="secondary-button" id="guidePrev">上一镜</button><button class="primary-button" id="guideNext">下一镜</button><button class="text-button" id="hideGuide">收起 / 展开</button><button class="text-button" id="exitRecording">退出</button></div></aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./cases.js?v=20260927c"></script>
+  <script src="./engine.js?v=20260927c"></script>
+  <script src="./medical-resources.js?v=20260927c"></script>
+  <script src="./clinical-experience.js?v=20260927c"></script>
+  <script src="./case-import.js?v=20260927c"></script>
+  <script src="./evidence-library.js?v=20260927c"></script>
+  <script src="./processing.js?v=20260927c"></script>
+  <script src="./app.js?v=20260927c"></script>
+</body>
+</html>

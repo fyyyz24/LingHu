@@ -1,0 +1,11 @@
+.openai/
+node_modules/
+.env
+.env.*
+tmp/
+*.log
+*.pdf
+*.pptx
+*.docx
+*-学习记录.json
+*-病例编排模板.json

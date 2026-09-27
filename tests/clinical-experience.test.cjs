@@ -1,0 +1,21 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.join(__dirname,'..','dist');
+const ctx=vm.createContext({document:{addEventListener(){}},window:{},console});
+for(const file of ['cases.js','engine.js','medical-resources.js','clinical-experience.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx,{filename:file});
+vm.runInContext('this.resources=caseResources;this.experience=ClinicalExperience;this.cases=caseLibrary',ctx);
+let checks=0;const check=(condition,message)=>{assert.ok(condition,message);checks++;};
+check(ctx.resources.length===6,'all six cases have references');
+ctx.resources.forEach((r,i)=>{
+ check(r.references.length>=1 && r.points.length>=2,`case ${i+1} needs learning context`);
+ r.assets.forEach(a=>{check(fs.existsSync(path.join(root,a.src)),`asset ${a.src} exists`);check(fs.statSync(path.join(root,a.src)).size>1000,'image is nonempty');check([a.author,a.license,a.licenseUrl,a.sourceUrl,a.remoteUrl,a.caption,a.limit,a.role].every(Boolean),'complete provenance');check(/^https:\/\//.test(a.sourceUrl),'source uses HTTPS');});
+ check(ctx.experience.evidence(i,0).unlocked===false,'images do not leak into history stage');
+ check(ctx.experience.evidence(i,2).unlocked===true,'images open at investigation stage');
+ const s=ctx.LinghuEngine.createSession(i);check(ctx.experience.frames(s,0).length===0,'no invented answers');
+ const first={type:'answer',stage:0,text:'病程',result:ctx.LinghuEngine.analyze(i,0,'病程')};
+ const next={type:'answer',stage:0,text:ctx.cases[i].stages[0][1],result:ctx.LinghuEngine.analyze(i,0,ctx.cases[i].stages[0][1])};
+ s.events.push(first,{type:'hint',stage:0},next,{...next,stage:1});
+ const frames=ctx.experience.frames(s,0);check(frames.length===2 && frames[1].eventIndex===2,'rounds use real stage-specific events');
+ const nodes=ctx.experience.nodes(i,0,frames[1],frames[0]);check(nodes.length===4 && nodes[1].text===next.text,'student answer preserved verbatim');check(nodes[3].items.length===1,'comparison only when prior answer exists');
+ check(ctx.experience.nodes(i,0,null,null)[3].items.length===0,'empty state has no fabricated revision');
+});
+console.log(`PASS: ${checks} source/asset/playback checks.`);

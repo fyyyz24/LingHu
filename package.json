@@ -1,0 +1,9 @@
+{
+  "name": "linghu-clinical-teaching",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Local evidence-led clinical teaching interaction demo",
+  "scripts": {
+    "test": "node tests/engine.test.cjs && node tests/clinical-experience.test.cjs && node tests/functional.test.cjs"
+  }
+}
