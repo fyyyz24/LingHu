@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="./clinical-report.css?v=20260927c" />
   <link rel="stylesheet" href="./clinical-experience.css?v=20260927c" />
   <link rel="stylesheet" href="./functional.css?v=20260927c" />
+  <link rel="stylesheet" href="./local-image.css?v=20260928" />
 </head>
 <body>
   <div class="app-shell">
@@ -63,8 +64,14 @@
       <section class="view" id="view-data" aria-labelledby="pageTitle">
         <div class="data-intro panel"><div><span class="section-kicker">DATA FACTORY</span><h2>病例教学数据构建流水线</h2><p>将多模态病例转写为可训练、可审计的临床推理轨迹。点击节点查看输入、处理规则与输出。</p></div><div class="data-summary"><span><b id="dataCaseCount">6</b>交互病例</span><span><b>5</b>阶段轨迹</span><span><b>3</b>层级提示</span></div></div>
         <article class="panel case-import"><span class="section-kicker">LOCAL CASE IMPORT</span><h2>导入病例 · 从文件到可训练病例</h2><p class="import-description">上传 JSON 或粘贴内容，先校验再确认。支持五阶段任务、分层提示、文献绑定与内嵌 PNG / JPEG / WebP 图片。仅保存在当前浏览器，不上传、不自动脱敏。</p>
-          <div class="import-actions"><a class="primary-button" href="./examples/TEACHING-IMPORT-01-IMAGE.json" download="TEACHING-IMPORT-01-IMAGE.json">下载带胸片示例</a><a class="text-button" href="./assets/references/pleural-effusion.png" download="pleural-effusion.png">单独下载参考胸片</a></div><p class="import-description">带图文件已内嵌胸片，下载后在下方选择即可。影像为 James Heilman, MD 的公开右侧胸腔积液参考（CC BY-SA 3.0），非虚拟患者原片。新 id 与旧纯文字示例可并存。</p>
-          <form id="caseImportForm"><div class="import-actions"><label>选择病例 JSON <input id="caseImportFile" type="file" accept=".json,application/json"></label><button type="button" class="secondary-button" id="loadImportExample">填入纯文字示例</button></div><textarea id="caseImportText" aria-label="病例 JSON 内容" placeholder="选择已下载的带胸片 JSON，或填入纯文字示例。"></textarea><label class="import-consent"><input id="confirmDeidentified" type="checkbox">我已人工脱敏并确认拥有资料使用权限。结构校验不等于医学审核。</label><div class="import-actions"><button class="secondary-button" type="submit">校验并预览</button><button class="primary-button" type="button" id="confirmCaseImport" disabled>确认导入病例库</button></div></form><div id="importPreview" class="import-preview" role="status">尚未校验。病例只写入本机浏览器，不上传患者资料。</div></article>
+          <details><summary>可选：下载已有示例或参考胸片</summary><div class="import-actions"><a class="secondary-button" href="./examples/TEACHING-IMPORT-01-IMAGE.json" download="TEACHING-IMPORT-01-IMAGE.json">下载带胸片示例</a><a class="text-button" href="./assets/references/pleural-effusion.png" download="pleural-effusion.png">单独下载参考胸片</a></div><p class="import-description">也可不用此示例：在下方填写病例后直接上传自己的图片。示例参考图作者 James Heilman, MD，CC BY-SA 3.0，非虚拟患者原片。</p></details>
+          <form id="caseImportForm"><div class="import-actions"><label>① 选择病例 JSON <input id="caseImportFile" type="file" accept=".json,application/json"></label><button type="button" class="secondary-button" id="loadImportExample">填入纯文字示例</button></div><textarea id="caseImportText" aria-label="病例 JSON 内容" placeholder="选择病例 JSON，或先填入纯文字示例，再从电脑上传图片。"></textarea>
+            <fieldset class="local-image-upload"><legend>② 上传本地病例图片（可选）</legend><p class="import-description">直接选择电脑中的 PNG / JPEG / WebP 图片，原图不压缩、不修改、不上传服务器。每张不超过 1.1 MB；本次图片会附加到 JSON 已有影像。图片本身不会自动生成病史或诊断。</p>
+              <div class="import-actions"><label class="local-image-picker">选择本地图片 <input id="caseImageFile" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"></label><button class="secondary-button" id="removeLocalImage" type="button" disabled>移除本地图片</button></div>
+              <p id="localImageStatus" role="status">尚未选择本地图片。可直接从电脑选择，不需要填写 base64。</p><img id="localImagePreview" class="local-image-preview" alt="待导入的本地病例图片预览" hidden>
+              <div class="local-image-fields"><label>图片类型<select id="localImageLabel"><option>胸片</option><option>CT</option><option>病理图像</option><option>体征照片</option><option>其他影像</option></select></label><label>图片说明<input id="localImageCaption" maxlength="500" placeholder="例如：右侧胸腔积液参考图，非本患者原片"></label><label>作者 / 提供者<input id="localImageAuthor" maxlength="500" placeholder="填写作者或合法提供者"></label><label>授权 / 使用范围<input id="localImageLicense" maxlength="500" placeholder="例如：本人所有，仅用于教学；或具体 CC 许可"></label><label class="wide">来源说明<input id="localImageSource" maxlength="500" placeholder="填写来源或授权记录；无需公开网址，请勿填写患者身份信息"></label></div>
+            </fieldset>
+            <label class="import-consent"><input id="confirmDeidentified" type="checkbox">我已人工脱敏并确认拥有病例及图片使用权限。结构校验不等于医学审核。</label><div class="import-actions"><button class="secondary-button" type="submit">校验并预览</button><button class="primary-button" type="button" id="confirmCaseImport" disabled>确认导入病例库</button><button class="secondary-button" type="button" id="exportImportBundle" disabled>下载含图片的病例包</button></div></form><div id="importPreview" class="import-preview" role="status">尚未校验。病例只写入本机浏览器，不上传患者资料。</div></article>
         <div class="data-template"><span>真实病例由临床教师校核后接入</span><button class="secondary-button" id="downloadTemplate">下载医生病例编排模板</button></div><div class="pipeline" id="pipeline"><button class="pipeline-step active" data-step="0"><b>01</b><span>导入与脱敏<small>文本 + 医学影像</small></span></button><i>→</i><button class="pipeline-step" data-step="1"><b>02</b><span>五阶段拆解<small>临床推理轨迹</small></span></button><i>→</i><button class="pipeline-step" data-step="2"><b>03</b><span>专家标注<small>支持/反对证据</small></span></button><i>→</i><button class="pipeline-step" data-step="3"><b>04</b><span>分层提示<small>见习/实习/住培</small></span></button><i>→</i><button class="pipeline-step" data-step="4"><b>05</b><span>证据绑定<small>来源与版本</small></span></button><i>→</i><button class="pipeline-step" data-step="5"><b>06</b><span>质量检查<small>安全与非剧透</small></span></button></div>
         <div class="two-column data-workspace"><article class="panel step-detail" id="stepDetail"></article><article class="panel quality-panel"><div class="panel-heading"><div><span>QUALITY GATE</span><h3>数据质量检查</h3></div><span class="review-badge">质检规则</span></div><div class="quality-score"><div><strong>4</strong><span>项</span></div><p>关键检查规则<br><small>覆盖隐私、教学与安全</small></p></div><ul class="checklist"><li class="pass"><span>✓</span><div><b>隐私字段清除</b><small>姓名、ID、机构标识</small></div></li><li class="pass"><span>✓</span><div><b>最终诊断延迟揭示</b><small>规定阶段前不直接给答案</small></div></li><li class="pass"><span>✓</span><div><b>危险遗漏标注</b><small>危急值与升级救治阈值</small></div></li><li class="warn"><span>!</span><div><b>证据版本复核</b><small>教材与指南需定期更新</small></div></li></ul></article></div>
       </section>
@@ -109,9 +116,9 @@
   <script src="./cases.js?v=20260927c"></script>
   <script src="./engine.js?v=20260927c"></script>
   <script src="./medical-resources.js?v=20260927c"></script>
-  <script src="./clinical-experience.js?v=20260927c"></script>
-  <script src="./case-import.js?v=20260927c"></script>
-  <script src="./evidence-library.js?v=20260927c"></script>
+  <script src="./clinical-experience.js?v=20260928-upload"></script>
+  <script src="./case-import.js?v=20260928-upload"></script>
+  <script src="./evidence-library.js?v=20260928-upload"></script>
   <script src="./processing.js?v=20260927c"></script>
   <script src="./app.js?v=20260927c"></script>
 </body>

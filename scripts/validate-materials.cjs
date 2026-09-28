@@ -1,6 +1,6 @@
 const cp=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
 const {root,sha,read,write}=require('./materials-lib.cjs');
-const suites=['engine','clinical-experience','functional','materials'];
+const suites=['engine','clinical-experience','functional','materials','local-image'];
 const results=suites.map(name=>{const p=cp.spawnSync(process.execPath,[`tests/${name}.test.cjs`],{cwd:root,encoding:'utf8',timeout:120000});return {suite:name,exit_code:p.status,output:p.stdout.trim(),error:(p.stderr||p.error?.message||'').trim()};});
 const checkedFiles=['datasets/train.jsonl','datasets/validation.jsonl','datasets/test.jsonl','datasets/eval-prompts.jsonl','datasets/eval-reference.jsonl','datasets/split-manifest.json','datasets/assets-manifest.json','dist/examples/TEACHING-IMPORT-01-IMAGE.json'];
 for(const dir of ['dist','tests','scripts'])for(const name of fs.readdirSync(path.join(root,dir))){if(/\.(?:js|cjs|html|css|py)$/.test(name))checkedFiles.push(dir+'/'+name);}

@@ -1,10 +1,10 @@
 {
   "name": "linghu-clinical-teaching",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "description": "LingHu clinical teaching application and reproducible teaching-data preparation",
   "scripts": {
-    "test": "node tests/engine.test.cjs && node tests/clinical-experience.test.cjs && node tests/functional.test.cjs && node tests/materials.test.cjs",
+    "test": "node tests/engine.test.cjs && node tests/clinical-experience.test.cjs && node tests/functional.test.cjs && node tests/materials.test.cjs && node tests/local-image.test.cjs",
     "materials:build": "node scripts/build-materials.cjs",
     "materials:validate": "node scripts/validate-materials.cjs",
     "materials:package": "python scripts/package-submission.py"

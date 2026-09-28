@@ -1,6 +1,6 @@
 {
   "kind": "actual_structural_and_application_tests_not_model_evaluation",
-  "executed_at": "2026-09-28T10:41:23.197Z",
+  "executed_at": "2026-09-28T11:03:46.758Z",
   "node": "v24.19.0",
   "platform": "win32",
   "status": "passed",
@@ -11,7 +11,7 @@
     {
       "suite": "engine",
       "exit_code": 0,
-      "output": "PASS: 383 checks; 6 cases × 5 stages × 3 levels, branching, metrics, isolation and page bindings.",
+      "output": "PASS: 384 checks; 6 cases × 5 stages × 3 levels, branching, metrics, isolation and page bindings.",
       "error": ""
     },
     {
@@ -30,6 +30,12 @@
       "suite": "materials",
       "exit_code": 0,
       "output": "PASS: 926 materials, split isolation, image import and provenance checks.",
+      "error": ""
+    },
+    {
+      "suite": "local-image",
+      "exit_code": 0,
+      "output": "PASS: 29 local image upload, metadata, preservation and async UI checks.",
       "error": ""
     }
   ],
@@ -72,7 +78,7 @@
     },
     {
       "file": "dist/case-import.js",
-      "sha256": "8293bb20ff039b4003b518c69d4ce180b50933b2d1f2d58e467b4a8e53f2e1d7"
+      "sha256": "70f6cb6573bb3b2f505923c5158fac2aa3da0a7dfa73c1b78b6cda369e968377"
     },
     {
       "file": "dist/cases.js",
@@ -84,7 +90,7 @@
     },
     {
       "file": "dist/clinical-experience.js",
-      "sha256": "ece452093fa25e7aabe02f054de8ffaca37e684a1e7aaaf00be1c07ba163c4a1"
+      "sha256": "e4c9e660497dc72338dc011aa92f60d29f0e5e78a2090a1b123f67649ac64d4b"
     },
     {
       "file": "dist/clinical-report.css",
@@ -100,7 +106,7 @@
     },
     {
       "file": "dist/evidence-library.js",
-      "sha256": "0956726e178507fab3bd57eb66b8874a310dc6dada284f37ff768888ac131868"
+      "sha256": "26c8a9420a276a399afe46d4c0f4af7923e612d67d5d055f75e22379217a18fa"
     },
     {
       "file": "dist/functional.css",
@@ -108,7 +114,11 @@
     },
     {
       "file": "dist/index.html",
-      "sha256": "31818fe4262fb4ff9057d1fc7cc2045e7a91d27962b7192c43c5d461b29d30d0"
+      "sha256": "7cbb05b47637b3929d39813f9e01aaaef872227266bba127da53090a845d0468"
+    },
+    {
+      "file": "dist/local-image.css",
+      "sha256": "305ecad258985a9babf03a9e21ed90fd072c4db388343171b6e422031198807a"
     },
     {
       "file": "dist/medical-resources.js",
@@ -139,6 +149,10 @@
       "sha256": "b32c70239c2d923e95be95ae9279a6e3690d6642b81bc855479409a8d05ad7f2"
     },
     {
+      "file": "tests/local-image.test.cjs",
+      "sha256": "551ea4bf1934e1ff4501fad0651fe5fa27d147b445720f0f0a223986b7bae560"
+    },
+    {
       "file": "tests/materials.test.cjs",
       "sha256": "acfa7bc7335e9a4d078694a20af2e1f8443a227b3d8c12f34546fa00dc84d703"
     },
@@ -156,7 +170,7 @@
     },
     {
       "file": "scripts/validate-materials.cjs",
-      "sha256": "637ce97b770d14bf859a33be4e1883c6907155746eca1b0e60a128cb113f5ef0"
+      "sha256": "fdd511b75a21249a1960c66b3fbec937154f72c254c41704f448c10c26603da5"
     }
   ]
 }

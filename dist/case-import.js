@@ -39,7 +39,10 @@ const CaseImport = (() => {
     if(Array.isArray(b.assets))b.assets.forEach((a,i)=>{
       add(typeof a?.dataUrl==='string'&&a.dataUrl.length<=1500000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(a.dataUrl),`图 ${i+1} 仅支持编码文本不超过 1.5 MB 的 PNG/JPEG/WebP base64，禁止 SVG 和远程自动加载`);
       for(const k of ['label','caption','author','license'])add(string(a?.[k],500),`图 ${i+1} ${k} 必填`);
-      add(https(a?.sourceUrl)&&https(a?.licenseUrl),`图 ${i+1} 需填写来源与许可 HTTPS 链接`);
+      if(a?.sourceType==='local'){
+        add(string(a.sourceNote,500),`图 ${i+1} 需填写本地图片来源说明`);
+        add((!a.sourceUrl||https(a.sourceUrl))&&(!a.licenseUrl||https(a.licenseUrl)),`图 ${i+1} 可不填公开链接；填写时必须为无凭据 HTTPS 链接`);
+      }else add(https(a?.sourceUrl)&&https(a?.licenseUrl),`图 ${i+1} 需填写来源与许可 HTTPS 链接`);
     });
     return [...new Set(errors)];
   }
@@ -55,14 +58,38 @@ const CaseImport = (() => {
   function commit(b, storage=localStorage){if(storageBlocked)throw Error('原有病例存档异常，为避免覆盖已停止写入，请先备份并修复站点存档');const errors=validate(b);if(errors.length)throw new Error(errors.join('；'));const next=[...bundles,b], raw=JSON.stringify(next);if(next.length>20||new Blob([raw]).size>MAX_BYTES)throw new Error('最多导入 20 例，合计 2.5 MB，请减少图片大小');storage.setItem(KEY,raw);const index=apply(b);bundles=next;return index;}
   function restore(storage=localStorage){try{const raw=storage.getItem(KEY);if(!raw)return;const saved=JSON.parse(raw);if(!Array.isArray(saved)||saved.length>20||new Blob([raw]).size>MAX_BYTES)throw Error('病例存档结构或大小异常');const ids=[];for(const b of saved){const errors=validate(b,ids);if(errors.length)throw Error(errors[0]);ids.push(b.id);}saved.forEach(apply);bundles=saved;}catch(error){storageBlocked=true;throw error;}}
   function sample(){const c=caseLibrary[0],d=caseClinicalDetails[0];return {schemaVersion:1,id:'TEACHING-IMPORT-01',title:'导入示例 · 呼吸困难教学练习',specialty:'呼吸系统',review:{status:'pending',reviewer:'',reviewedAt:''},provenance:{source:'灵葫内置教学扩写；非真实病历',permission:'用于本地教学流程测试',deidentified:true},patient:{age:63,sex:'男',chiefComplaint:d.chiefComplaint,history:d.history,exam:d.exam,labs:d.labs},stages:stageNames.map((title,i)=>({order:i+1,title,releasedFacts:[i===0?d.chiefComplaint:i===1?d.exam:i===2?d.labs:'请整合已开放资料。'],question:c.stages[i][0],referenceAnswer:c.stages[i][1],requiredConcepts:LinghuEngine.getGroups(0,i).map(g=>g.label),acceptedAliases:Object.fromEntries(LinghuEngine.getGroups(0,i).map(g=>[g.label,g.aliases])),dangerousOmissions:i===4?['先评估病情严重度']:[],hintLevels:{clerk:'请按要点逐项解释。',intern:c.stages[i][3],resident:'如果判断不成立，哪些证据需要重新核对？'},evidenceIds:['BTS2023']})),assets:[],references:[{id:'BTS2023',title:'BTS Guideline for Pleural Disease',publisher:'British Thoracic Society',section:'Undiagnosed unilateral pleural effusion',url:'https://www.brit-thoracic.org.uk/clinical-resources/guidelines/pleural-disease/',version:'2023'}]};}
+  async function readLocalImage(file){
+    if(!file||file.size===0||file.size>1100000)throw Error('请选择不超过 1.1 MB 的 PNG / JPEG / WebP 图片；原图不会被压缩或修改。');
+    const bytes=new Uint8Array(await file.arrayBuffer());
+    const mime=bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71&&bytes[4]===13&&bytes[5]===10&&bytes[6]===26&&bytes[7]===10?'image/png':bytes[0]===255&&bytes[1]===216&&bytes[2]===255?'image/jpeg':String.fromCharCode(...bytes.slice(0,4))==='RIFF'&&String.fromCharCode(...bytes.slice(8,12))==='WEBP'?'image/webp':null;
+    if(!mime)throw Error('文件内容不是支持的 PNG / JPEG / WebP 图片，不支持 SVG、DICOM 或仅修改后缀的文件。');
+    let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
+    const dataUrl=`data:${mime};base64,${btoa(binary)}`;
+    const dimensions=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve({width:img.naturalWidth,height:img.naturalHeight});img.onerror=()=>reject(Error('图片无法解码，请重新导出为 PNG / JPEG / WebP 后再选择。'));img.src=dataUrl;});
+    return {dataUrl,bytes:file.size,...dimensions};
+  }
+  function withLocalImage(bundle,image,metadata){
+    if(!image)return bundle;
+    if(!Array.isArray(bundle.assets))throw Error('病例 assets 需为数组；无图片时填写 []');
+    return {...bundle,assets:[...bundle.assets,{sourceType:'local',dataUrl:image.dataUrl,label:metadata.label,caption:metadata.caption,author:metadata.author,license:metadata.license,sourceNote:metadata.sourceNote}]};
+  }
   function initUI(){
     const form=document.getElementById('caseImportForm'), out=document.getElementById('importPreview'), confirm=document.getElementById('confirmCaseImport');
     const clear=()=>{pending=null;confirm.disabled=true;out.textContent='尚未校验。病例只写入本机浏览器，不上传患者资料。';};
-    form.addEventListener('input',clear);
-    document.getElementById('caseImportFile').onchange=async e=>{clear();const f=e.target.files[0];if(!f)return;if(f.size>MAX_BYTES){out.textContent='文件过大：请选择不超过 2.5 MB 的 JSON';return;}const text=await f.text();if(e.target.files[0]!==f)return;document.getElementById('caseImportText').value=text;};
-    document.getElementById('loadImportExample').onclick=()=>{clear();document.getElementById('caseImportText').value=JSON.stringify(sample(),null,2);};
-    form.onsubmit=e=>{e.preventDefault();clear();try{if(recording)throw Error('请先退出录屏模式，再导入持久病例');if(!document.getElementById('confirmDeidentified').checked)throw Error('请确认内容已脱敏且拥有使用权限');const raw=document.getElementById('caseImportText').value;if(new Blob([raw]).size>MAX_BYTES)throw Error('JSON 超过 2.5 MB');const b=JSON.parse(raw),errors=validate(b);if(errors.length){out.textContent=errors.join('\n');return;}pending=b;out.textContent=`结构校验通过（不是医学审核）\n${b.title}\n${b.patient.age} 岁 · ${b.specialty}\n5 阶段 · ${b.references.length} 条来源 · ${b.assets.length} 张图\n审核声明：${b.review.status==='reviewed'?'导入者声明已审核，平台未独立验证':'待临床教师审核'}\n确认后在病例库与训练选择器中可见。`;confirm.disabled=false;}catch(err){out.textContent=err.message;}};
-    confirm.onclick=()=>{if(!pending)return;try{if(recording)throw Error('请先退出录屏模式');const index=commit(pending);clear();refreshCaseSelectors();renderCaseCards();selectCase(index);navigate('cases');showToast('病例已入库并保存在本机；可查看详情和进入训练');}catch(err){out.textContent=`未导入：${err.message}。请保留原 JSON 文件。`;}};
+    const imageInput=document.getElementById('caseImageFile'),imagePreview=document.getElementById('localImagePreview'),imageStatus=document.getElementById('localImageStatus'),removeImage=document.getElementById('removeLocalImage'),exportButton=document.getElementById('exportImportBundle');
+    let localImage=null,imageSequence=0,jsonSequence=0,readingImage=false,readingJSON=false,imageError='';
+    const invalidate=()=>{clear();exportButton.disabled=true;};
+    function resetImage(){imageSequence++;localImage=null;readingImage=false;imageError='';imageInput.value='';imagePreview.removeAttribute('src');imagePreview.hidden=true;removeImage.disabled=true;imageStatus.textContent='尚未选择本地图片。可直接从电脑选择，不需要填写 base64。';invalidate();}
+    imageInput.onchange=async()=>{const file=imageInput.files[0];resetImage();if(!file)return;const seq=imageSequence;readingImage=true;removeImage.disabled=false;imageStatus.textContent='正在读取并检查图片…';try{const result=await readLocalImage(file);if(seq!==imageSequence)return;localImage=result;imagePreview.src=result.dataUrl;imagePreview.hidden=false;imageStatus.textContent=`图片已就绪 · ${result.width} × ${result.height} · ${(result.bytes/1024).toFixed(0)} KB · 校验时附加到病例，不修改原图`;}
+      catch(err){if(seq!==imageSequence)return;imageError=err.message;imageStatus.textContent=imageError;}finally{if(seq===imageSequence)readingImage=false;}};
+    removeImage.onclick=resetImage;
+    form.addEventListener('input',e=>{if(e.target.id==='caseImportText'&&readingJSON){jsonSequence++;readingJSON=false;}invalidate();});
+    const merge=()=>withLocalImage(JSON.parse(document.getElementById('caseImportText').value),localImage,{label:document.getElementById('localImageLabel').value.trim(),caption:document.getElementById('localImageCaption').value.trim(),author:document.getElementById('localImageAuthor').value.trim(),license:document.getElementById('localImageLicense').value.trim(),sourceNote:document.getElementById('localImageSource').value.trim()});
+    document.getElementById('caseImportFile').onchange=async e=>{invalidate();resetImage();const f=e.target.files[0],seq=++jsonSequence;readingJSON=false;if(!f)return;readingJSON=true;document.getElementById('caseImportText').value='';try{if(f.size>MAX_BYTES)throw Error('文件过大：请选择不超过 2.5 MB 的 JSON');const text=await f.text();if(seq!==jsonSequence)return;document.getElementById('caseImportText').value=text;}catch(err){if(seq===jsonSequence)out.textContent=err.message;}finally{if(seq===jsonSequence)readingJSON=false;}};
+    document.getElementById('loadImportExample').onclick=()=>{jsonSequence++;readingJSON=false;resetImage();const b=sample();b.id=`TEACHING-IMPORT-${Date.now()}`;document.getElementById('caseImportText').value=JSON.stringify(b,null,2);};
+    form.onsubmit=e=>{e.preventDefault();invalidate();try{if(readingImage||readingJSON)throw Error('文件仍在读取，请稍候再校验');if(imageError)throw Error(imageError+' 请更换图片，或点击移除图片。');if(recording)throw Error('请先退出录屏模式，再导入持久病例');if(!document.getElementById('confirmDeidentified').checked)throw Error('请确认内容已脱敏且拥有使用权限');const b=merge();if(new Blob([JSON.stringify(b)]).size>MAX_BYTES)throw Error('病例与图片合计超过 2.5 MB');const errors=validate(b);if(errors.length){out.textContent=errors.join('\n');return;}pending=b;out.textContent=`结构校验通过（不是医学审核）\n${b.title}\n${b.patient.age} 岁 · ${b.specialty}\n5 阶段 · ${b.references.length} 条来源 · ${b.assets.length} 张图${localImage?'（含本地上传图片）':''}\n审核声明：${b.review.status==='reviewed'?'导入者声明已审核，平台未独立验证':'待临床教师审核'}\n确认后在病例库与训练选择器中可见。`;confirm.disabled=false;exportButton.disabled=false;}catch(err){out.textContent=err.message;}};
+    exportButton.onclick=()=>{if(!pending)return;const url=URL.createObjectURL(new Blob([JSON.stringify(pending,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`${pending.id}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+    confirm.onclick=()=>{if(!pending)return;try{if(recording)throw Error('请先退出录屏模式');const index=commit(pending);invalidate();refreshCaseSelectors();renderCaseCards();selectCase(index);navigate('cases');showToast('病例及图片已入库并保存在本机；可查看详情和进入训练');}catch(err){out.textContent=`未导入：${err.message}。可先下载含图片的病例包备份。`;}};
   }
-  return {validate,commit,restore,sample,initUI,https};
+  return {validate,commit,restore,sample,initUI,https,readLocalImage,withLocalImage};
 })();

@@ -1,7 +1,7 @@
 /* Evidence-led playback: renders observable student events, never model internals. */
 const ClinicalExperience = (() => {
   const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const link = (url, label) => `<a href="${html(url)}" target="_blank" rel="noopener noreferrer">${html(label)} ↗</a>`;
+  const link = (url, label) => url ? `<a href="${html(url)}" target="_blank" rel="noopener noreferrer">${html(label)} ↗</a>` : `<span>${html(label)}</span>`;
   const resource = index => caseResources[index];
   function thumbnail(index) {
     const a = resource(index)?.assets[0];
@@ -26,7 +26,7 @@ const ClinicalExperience = (() => {
       function zoom(){img.style.width=`${Number(range.value)*100}%`;img.style.maxWidth='none';output.value=`${range.value}×`;}
       range.oninput=zoom;view.querySelector('button').onclick=()=>{range.value=1;zoom();};
       img.onerror=()=>{view.querySelector('.reference-image-viewport').innerHTML='<p class="empty-state">本地影像未加载，请从下方原始来源查看。</p>';};
-      document.getElementById('caseMediaCaption').innerHTML=`<b class="reference-tag">${html(a.role)}</b><span>${html(a.caption)}</span><span class="image-limit">${html(a.limit)}</span><span class="image-credit">${html(a.author)} · ${link(a.licenseUrl,a.license)} · ${link(a.sourceUrl,'原始来源')}</span>`;
+      document.getElementById('caseMediaCaption').innerHTML=`<b class="reference-tag">${html(a.role)}</b><span>${html(a.caption)}</span><span class="image-limit">${html(a.limit)}</span><span class="image-credit">${html(a.author)} · ${link(a.licenseUrl,a.license)} · ${a.sourceUrl?link(a.sourceUrl,'原始来源'):html('本地图片来源：'+a.sourceNote)}</span>`;
     }
     tabs.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>selectAsset(i));selectAsset(0);
   }
@@ -34,7 +34,7 @@ const ClinicalExperience = (() => {
     const r=resource(index), a=r.assets[0];
     if(!a)return {unlocked:stage>=2,visual:'<span>本例未导入影像</span>',note:'请查看已开放的文字检查资料。'};
     const unlocked=stage>=2 || (index===4 && stage>=1);
-    return {unlocked,visual:unlocked?`<img class="evidence-reference-image" src="${html(a.src)}" alt="${html(a.alt)}"><small>${html(a.role)} · ${link(a.sourceUrl,'查看原图来源')}</small>`:'<span>资料按训练阶段开放</span>',note:unlocked?`${a.caption} ${a.limit}`:'请先完成病史采集与查体；本病例的公开参考影像在对应阶段开放。'};
+    return {unlocked,visual:unlocked?`<img class="evidence-reference-image" src="${html(a.src)}" alt="${html(a.alt)}"><small>${html(a.role)} · ${a.sourceUrl?link(a.sourceUrl,'查看原图来源'):html('本地图片 · '+a.sourceNote)}</small>`:'<span>资料按训练阶段开放</span>',note:unlocked?`${a.caption} ${a.limit}`:'请先完成病史采集与查体；本病例的公开参考影像在对应阶段开放。'};
   }
   function referenceEvidence(index) {
     const r=resource(index);return r?`<div class="verified-reference"><b>公开学习资料</b>${r.references.map(ref=>`<p>${link(ref.url,ref.title)}<small>${html(ref.section)}</small></p>`).join('')}<small>资料来源已登记；具体反馈条目与病例适用性仍需临床教师审核。</small></div>`:'';
