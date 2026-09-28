@@ -37,7 +37,7 @@ const CaseImport = (() => {
     });
     add(Array.isArray(b.assets)&&b.assets.length<=6,'assets 必须为数组，最多六张图片（可为空）');
     if(Array.isArray(b.assets))b.assets.forEach((a,i)=>{
-      add(typeof a?.dataUrl==='string'&&a.dataUrl.length<=1000000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(a.dataUrl),`图 ${i+1} 仅支持小于 1 MB 的 PNG/JPEG/WebP base64，禁止 SVG 和远程自动加载`);
+      add(typeof a?.dataUrl==='string'&&a.dataUrl.length<=1500000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(a.dataUrl),`图 ${i+1} 仅支持编码文本不超过 1.5 MB 的 PNG/JPEG/WebP base64，禁止 SVG 和远程自动加载`);
       for(const k of ['label','caption','author','license'])add(string(a?.[k],500),`图 ${i+1} ${k} 必填`);
       add(https(a?.sourceUrl)&&https(a?.licenseUrl),`图 ${i+1} 需填写来源与许可 HTTPS 链接`);
     });

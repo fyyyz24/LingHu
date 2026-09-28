@@ -1,9 +1,12 @@
 {
   "name": "linghu-clinical-teaching",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
-  "description": "Local evidence-led clinical teaching interaction demo",
+  "description": "LingHu clinical teaching application and reproducible teaching-data preparation",
   "scripts": {
-    "test": "node tests/engine.test.cjs && node tests/clinical-experience.test.cjs && node tests/functional.test.cjs"
+    "test": "node tests/engine.test.cjs && node tests/clinical-experience.test.cjs && node tests/functional.test.cjs && node tests/materials.test.cjs",
+    "materials:build": "node scripts/build-materials.cjs",
+    "materials:validate": "node scripts/validate-materials.cjs",
+    "materials:package": "python scripts/package-submission.py"
   }
 }

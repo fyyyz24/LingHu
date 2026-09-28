@@ -1,0 +1,5 @@
+datasets/*.jsonl text eol=lf
+datasets/*.json text eol=lf
+dist/examples/*.json text eol=lf
+release/*.zip binary
+dist/assets/** binary

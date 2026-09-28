@@ -1,0 +1,34 @@
+{
+  "version": "teaching-seed-v1",
+  "unit": "case",
+  "patient_records": 0,
+  "total_tasks": 90,
+  "review": "pending",
+  "model_training_executed": false,
+  "splits": {
+    "train": {
+      "cases": [
+        "CASE 01",
+        "CASE 02",
+        "CASE 03"
+      ],
+      "tasks": 45,
+      "sha256": "702440181756c8426b4b4125f6bc7379f88b0ebc38f27ac54ecbac71fa9e3721"
+    },
+    "validation": {
+      "cases": [
+        "CASE 04"
+      ],
+      "tasks": 15,
+      "sha256": "67a6c492178d787ce2acd9572ab3977bd573a047abc221cd496a3c33aeb1a98c"
+    },
+    "test": {
+      "cases": [
+        "CASE 05",
+        "CASE 06"
+      ],
+      "tasks": 30,
+      "sha256": "2e522e20db8d9c4528e8e292c908e11497a5b8f23fdb96bd03f8c651e12a4939"
+    }
+  }
+}
